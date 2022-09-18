@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular-project-udemy';
+  title = 'Angular App';
+  storedPosts :JSON[] = [];
+
+  onPostAdded (post:JSON){
+    this.storedPosts.push(post);
+  }
 }
