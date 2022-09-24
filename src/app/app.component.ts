@@ -1,4 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
+import {Post} from './posts/post.model';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,9 @@ import { Component, EventEmitter } from '@angular/core';
 })
 export class AppComponent {
   title = 'Angular App';
-  storedPosts :JSON[] = [];
+  storedPosts :Post[] = [];
 
-  onPostAdded (post:JSON){
+  onPostAdded (post:Post){
     this.storedPosts.push(post);
   }
 }
