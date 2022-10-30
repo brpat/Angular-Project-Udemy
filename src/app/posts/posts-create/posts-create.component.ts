@@ -50,11 +50,13 @@ export class PostsCreateComponent implements OnInit {
             id: postData._id,
             title: postData.title,
             content: postData.content,
+            imagePath: postData.imagePath,
           };
           //Course has setValue instead. Image required error otherwise
           this.form.patchValue({
             title: this.post.title,
             content: this.post.content,
+            imagePath: this.post.imagePath,
           });
         });
       } else {
@@ -92,7 +94,8 @@ export class PostsCreateComponent implements OnInit {
       this.postService.updatePost(
         this.postId,
         this.form.value.title,
-        this.form.value.content
+        this.form.value.content,
+        this.form.value.image
       );
     }
     this.form.reset();
