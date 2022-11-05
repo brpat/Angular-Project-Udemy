@@ -3,10 +3,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
-      "type": "pwa-chrome",
+      "name": "Launch via npm",
+      "type": "node",
       "request": "launch",
-      "preLaunchTask": "npm: start",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:server"]
+    },
+    {
+      "name": "ng serve",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "Launch via npm",
       "url": "http://localhost:4200/"
     },
     {
