@@ -1,12 +1,13 @@
-import { Component, OnDestroy, OnInit} from '@angular/core';
-import {Post} from '../post.model';
-import {PostService} from '../posts.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Post } from '../post.model';
+import { PostService } from '../posts.service';
 import { Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-posts-list',
   templateUrl: './posts-list.component.html',
-  styleUrls: ['./posts-list.component.css']
+  styleUrls: ['./posts-list.component.css'],
 })
 export class PostsListComponent implements OnInit, OnDestroy {
   // posts = [
@@ -15,28 +16,44 @@ export class PostsListComponent implements OnInit, OnDestroy {
   //   {title: 'Third Post', content: 'Third Content'},
   // ]
   postService: PostService;
-  posts:Post[] = [];
+  posts: Post[] = [];
+  totalPosts = 0;
+  postsPerPage = 2;
   isLoading = false;
-  private postsSub:Subscription = new Subscription();
+  currentPage = 1;
+  pageSizeOptions = [1, 2, 5, 10];
+  private postsSub: Subscription = new Subscription();
   constructor(postService: PostService) {
     this.postService = postService;
-   }
+  }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.postService.getPosts(); 
-    this.postsSub = this.postService.getPostUpdateListener().subscribe((posts:Post[])=>{
+    this.postService.getPosts(this.postsPerPage, this.currentPage);
+    this.postsSub = this.postService
+      .getPostUpdateListener()
+      .subscribe((postData: {posts:Post[], postCount:number}) => {
         this.isLoading = false;
-        this.posts = posts;
-    });
+        this.totalPosts = postData.postCount;
+        this.posts = postData.posts;
+      });
   }
 
   ngOnDestroy(): void {
     this.postsSub.unsubscribe();
   }
 
-  onDelete(postId:string): void {
-    this.postService.deletePost(postId);
+  onChangedPage(pageData: PageEvent) {
+    this.isLoading = true;
+    this.currentPage = pageData.pageIndex+1;
+    this.postsPerPage = pageData.pageSize;
+    this.postService.getPosts(this.postsPerPage, this.currentPage);
   }
 
+  onDelete(postId: string): void {
+    this.isLoading = true;
+    this.postService.deletePost(postId).subscribe(()=>{
+      this.postService.getPosts(this.postsPerPage, this.currentPage);
+    })
+  }
 }
