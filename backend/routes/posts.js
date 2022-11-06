@@ -1,6 +1,6 @@
 const express = require('express');
-
 const router = express.Router();
+
 const Post = require('../models/post');
 const multer = require("multer");
 
@@ -96,24 +96,27 @@ router.put("/:id",multer({storage:storage}).single("image"), (req, res, next) =>
 });
 
 
-router.use('', (req, res, next)=>{
-    // const posts = [
-    //     {
-    //         id: '1234567',
-    //         title:'Title',
-    //         content:'Content'
-    //     },
-    //     {
-    //         id: '12345678',
-    //         title:'Title2',
-    //         content:'Content2'
-    //     }
-    // ];
-    Post.find().then(documents=>{
+router.get('', (req, res, next)=>{
+    const pageSize = req.query.pagesize;
+    const currentPage = req.query.page;
+    let fetchedPosts;
+    const postQuery = Post.find(); 
+
+    if(pageSize && currentPage){
+        postQuery
+        .skip(pageSize * (currentPage - 1))
+        .limit(pageSize);
+    }
+
+    postQuery.then(documents=>{
+        fetchedPosts = documents;
+        return Post.count();
+    }).then(count=>{
         // will return automatically
-        res.status(200).json({message: '', posts: documents});
-    }).catch(err=>{
-        console.error("Error fetching posts");
+        res.status(200).json({message: '', posts: fetchedPosts, maxPosts:count});
+    })
+    .catch(err=>{
+        console.error("Error fetching posts", err);
     });
 });
 

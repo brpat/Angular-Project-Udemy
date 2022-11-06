@@ -4,13 +4,14 @@ import { PostsCreateComponent } from './posts/posts-create/posts-create.componen
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
 
 const routes: Routes = [
-  {path: '', component: PostsListComponent},
-  {path: 'create', component: PostsCreateComponent}, 
-  {path:'edit/:postId', component:PostsCreateComponent}
+  //below line automatically routes root path to posts.
+  { path: '', component: PostsListComponent },
+  { path: 'create', component: PostsCreateComponent },
+  { path: 'edit/:postId', component: PostsCreateComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
