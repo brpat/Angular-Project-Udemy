@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch via npm",
+      "name": "Start Backend",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
@@ -11,10 +11,17 @@
       "runtimeArgs": ["run", "start:server"]
     },
     {
-      "name": "ng serve",
+      "name": "Start FrontEnd",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "ng",
+      "runtimeArgs": ["serve"]
+    },
+    {
+      "name": "Launch App",
       "type": "chrome",
       "request": "launch",
-      "preLaunchTask": "Launch via npm",
       "url": "http://localhost:4200/"
     },
     {
