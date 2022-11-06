@@ -5,7 +5,6 @@ const app = express();
 const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
-
 const postsRoutes =  require('./routes/posts');
 
 mongoose.connect("mongodb+srv://admin7:ub10WKUszh4v@meanudemyproject.n8scu5d.mongodb.net/node-angular-course?retryWrites=true&w=majority")
