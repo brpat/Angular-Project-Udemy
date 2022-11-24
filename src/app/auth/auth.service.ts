@@ -2,18 +2,25 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { AuthData } from './auth-data.model';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 @Injectable({providedIn: 'root'})
 export class AuthService{
+    isAuthenticated = false;
     private token:string;
     private authStatusListener = new Subject<boolean>();
 
-    constructor(private http: HttpClient){
+    constructor(private http: HttpClient, private router:Router){
 
     }
 
     getToken():string{
         return this.token;
+    }
+
+    getIsAuth(){
+        return this.isAuthenticated;
     }
 
     getAuthStatusListener(){
@@ -42,8 +49,19 @@ export class AuthService{
             //console.log(data);
             const token = data.token;
             this.token = token;
-            //emit authStatus as logged in
-            this.authStatusListener.next(true);
+            if(token){
+                this.isAuthenticated = true;
+                //emit authStatus as logged in
+                this.authStatusListener.next(true);
+                this.router.navigate(['/']);
+            }
         });
+    }
+
+    logout(){
+        this.token = null;
+        this.isAuthenticated = false;
+        this.authStatusListener.next(false);
+        this.router.navigate(['/']);
     }
 }
