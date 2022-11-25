@@ -33,13 +33,11 @@ router.post('/login', (req, res, next)=>{
     let fetchedUser = null;
     User.findOne({email:req.body.email})
     .then(user=>{
-        console.log("USER:", user);
         if(!user){
             return res.status(401).json({
                 message:'Authentication failed'
             })
         }
-        console.log("++++", user);
         fetchedUser = user;
         return bcrypt.compare(req.body.password, user.password);
     })
@@ -54,16 +52,18 @@ router.post('/login', (req, res, next)=>{
              'longsigningsecret',
               {expiresIn:'1h'}
             );
+        console.log("Success");
         //will auto return
         res.status(200).json({
-            token:token
-        })
+            token: token,
+            expiresIn: 12000
+        });
     })
     .catch(err=>{
         return res.status(401).json({
             message:'Authentication failed',
             err:err
-        })
+        });
     });
 });
 
