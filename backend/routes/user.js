@@ -55,7 +55,8 @@ router.post('/login', (req, res, next)=>{
         console.log("Success");
         //will auto return
         res.status(200).json({
-            token:token
+            token: token,
+            expiresIn: 12000
         });
     })
     .catch(err=>{
