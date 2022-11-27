@@ -45,9 +45,12 @@ router.get('/:id', (req, res, next) => {
 
 router.delete('/:id',checkAuth, (req, res, next) => {
     const id = req.params.id;
-    Post.deleteOne({_id:id}).then(result => {
-        console.log("Successfully deleted post");
-        res.status(200).json({message: "post deleted"});
+    Post.deleteOne({_id:id, creator:req.userData.userId}).then(result => {
+        if (result.deletedCount > 0) {
+            res.status(200).send({result: 'Deleted Successfully!'});
+        }else{
+            res.status(403).send({result: 'Not Authorized!'});
+        }
     });
 });
 
@@ -56,7 +59,8 @@ router.post("", checkAuth,multer({storage:storage}).single("image"), (req, res, 
     const post = new Post({
         title: req.body.title,
         content: req.body.content, 
-        imagePath: url + '/images/' + req.file.filename
+        imagePath: url + '/images/' + req.file.filename,
+        creator: req.userData.userId
     });
     // return response as a post.
     post.save().then(createdPost => {
@@ -82,17 +86,22 @@ router.put("/:id",checkAuth,multer({storage:storage}).single("image"), (req, res
     const post = new Post({
         title: req.body.title,
         content: req.body.content, 
-        imagePath: imagePath
+        imagePath: imagePath,
+        creator: userData.userId
     });
     // have to $set instead of passing in post due to immutablity
-    Post.updateOne({_id: req.params.id}, { $set:
+    Post.updateOne({_id: req.params.id, creator:req.userData.userId}, { $set:
         { 
             title: req.body.title, 
             content: req.body.content,
             imagePath:imagePath
         }}).then(result =>{
-        console.log(result);
-        res.status(200).send({result: 'Update Success'});
+            if (result.modifiedCount > 0) {
+                res.status(200).send({result: 'Update Success!'});
+            }else{
+                res.status(403).send({result: 'Not Authorized!'});
+            }
+            
     })
 
 });

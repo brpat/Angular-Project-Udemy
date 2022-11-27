@@ -51,6 +51,7 @@ export class PostsCreateComponent implements OnInit {
             title: postData.title,
             content: postData.content,
             imagePath: postData.imagePath,
+            creator:postData.creator
           };
           //Course has setValue instead. Image required error otherwise
           this.form.patchValue({
