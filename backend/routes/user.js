@@ -35,7 +35,7 @@ router.post('/login', (req, res, next)=>{
     .then(user=>{
         if(!user){
             return res.status(401).json({
-                message:'Authentication failed'
+                message:'Authentication 1 failed'
             })
         }
         fetchedUser = user;
@@ -44,7 +44,7 @@ router.post('/login', (req, res, next)=>{
     .then(result=>{
         if(!result){
             return res.status(401).json({
-                message:'Authentication failed'
+                message:'Authentication 2 failed'
             })
         }
         const token = jwt.sign(
@@ -52,16 +52,17 @@ router.post('/login', (req, res, next)=>{
              'longsigningsecret',
               {expiresIn:'1h'}
             );
-        console.log("Success");
+        //console.log("Logged In Successfully", user.fetchedUser._id);
         //will auto return
         res.status(200).json({
             token: token,
-            expiresIn: 12000
+            expiresIn: 12000,
+            userId: fetchedUser._id
         });
     })
     .catch(err=>{
         return res.status(401).json({
-            message:'Authentication failed',
+            message:'Authentication 3 failed',
             err:err
         });
     });
