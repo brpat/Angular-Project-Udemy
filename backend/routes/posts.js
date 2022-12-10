@@ -73,6 +73,10 @@ router.post("", checkAuth,multer({storage:storage}).single("image"), (req, res, 
                 id:createdPost._id,
             }
         });
+    }).catch(err=>{
+        res.status(500).json({
+            message:"Post Creation Failed"
+        })
     });
     
   });
@@ -102,6 +106,8 @@ router.put("/:id",checkAuth,multer({storage:storage}).single("image"), (req, res
                 res.status(403).send({result: 'Not Authorized!'});
             }
             
+    }).catch(err =>{
+        res.status(500).json({message: "Failed to Update Post!"});
     })
 
 });
@@ -126,9 +132,9 @@ router.get('', (req, res, next)=>{
         // will return automatically
         res.status(200).json({message: '', posts: fetchedPosts, maxPosts:count});
     })
-    .catch(err=>{
-        console.error("Error fetching posts", err);
-    });
+    .catch(err =>{
+        res.status(500).json({message: "Failed to Retrieve Posts!"});
+    })
 });
 
 module.exports = router;

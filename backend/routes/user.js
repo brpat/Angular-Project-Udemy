@@ -23,7 +23,7 @@ router.post('/signup', (req, res, next)=>{
             });
         }).catch(err=>{
             res.status(500).json({
-                error:err
+                message:"Username already exists!"
             });
         });  
     });
@@ -35,7 +35,7 @@ router.post('/login', (req, res, next)=>{
     .then(user=>{
         if(!user){
             return res.status(401).json({
-                message:'Authentication 1 failed'
+                message:'Authentication failed'
             })
         }
         fetchedUser = user;
@@ -44,7 +44,7 @@ router.post('/login', (req, res, next)=>{
     .then(result=>{
         if(!result){
             return res.status(401).json({
-                message:'Authentication 2 failed'
+                message:'Authentication failed'
             })
         }
         const token = jwt.sign(
@@ -62,8 +62,7 @@ router.post('/login', (req, res, next)=>{
     })
     .catch(err=>{
         return res.status(401).json({
-            message:'Authentication 3 failed',
-            err:err
+            message:'Invalid Authentication Credentials'
         });
     });
 });
