@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const postsRoutes =  require('./routes/posts');
 const userRoutes = require('./routes/user');
 
-mongoose.connect("mongodb+srv://admin7:ub10WKUszh4v@meanudemyproject.n8scu5d.mongodb.net/node-angular-course?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://admin7:" + process.env.MONGO_ATLAS_PASSWORD +  "@meanudemyproject.n8scu5d.mongodb.net/node-angular-course?retryWrites=true&w=majority")
 .then(()=>{
     console.log('Connected to MongoDB');
 }).catch(err => {
